@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="TFM-Manager.Api/TFM-Manager.Api.csproj" />
+  <Project Path="TFM-Manager.Business/TFM-Manager.Business.csproj" />
+  <Project Path="TFM-Manager.Data/TFM-Manager.Data.csproj" />
+</Solution>
