@@ -8,12 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\Identity\" />
-    <Folder Include="Entities\Companies\" />
-    <Folder Include="Entities\Employees\" />
-    <Folder Include="Entities\Documents\" />
     <Folder Include="Entities\Lookups\" />
-    <Folder Include="Entities\Partners\" />
     <Folder Include="DbContext\" />
     <Folder Include="Migrations\" />
     <Folder Include="Seed\" />
