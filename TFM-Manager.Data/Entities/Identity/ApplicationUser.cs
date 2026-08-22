@@ -9,7 +9,7 @@ using TFM_Manager.Data.Entities.Lookups;
 
 namespace TFM_Manager.Data.Entities.Identity
 {
-    public class AppllicationUser : IdentityUser<int>, IEntityTypeConfiguration<AppllicationUser>
+    public class ApplicationUser : IdentityUser<int>, IEntityTypeConfiguration<ApplicationUser>
     {
         public int EmployeeId { get; set; }
         public Employee Employee { get; set; } = null!;
@@ -19,7 +19,7 @@ namespace TFM_Manager.Data.Entities.Identity
 
         public bool IsActive { get; set; } = true;
 
-        public void Configure(EntityTypeBuilder<AppllicationUser> builder)
+        public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
             builder.HasKey(x => x.Id);
 
@@ -50,7 +50,7 @@ namespace TFM_Manager.Data.Entities.Identity
 
             builder.HasOne(x => x.Employee)
                 .WithOne(x => x.ApplicationUser)
-                .HasForeignKey<AppllicationUser>(x => x.EmployeeId)
+                .HasForeignKey<ApplicationUser>(x => x.EmployeeId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(x => x.UserRole)

@@ -13,7 +13,7 @@ using TFM_Manager.Data.Seed;
 
 namespace TFM_Manager.Data.DbContext
 {
-    public class TfmManagerDbContext : IdentityUserContext<AppllicationUser, int>
+    public class TfmManagerDbContext : IdentityUserContext<ApplicationUser, int>
     {
         public TfmManagerDbContext(DbContextOptions<TfmManagerDbContext> options)
             : base(options)

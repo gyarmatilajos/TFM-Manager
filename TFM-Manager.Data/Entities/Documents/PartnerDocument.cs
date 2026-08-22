@@ -27,7 +27,7 @@ namespace TFM_Manager.Data.Entities.Documents
         public long? FileSize { get; set; }
 
         public int UploadedByUserId { get; set; }
-        public AppllicationUser UploadedByUser { get; set; } = null!;
+        public ApplicationUser UploadedByUser { get; set; } = null!;
 
         public DateTime UploadedAt { get; set; }
         public bool IsActive { get; set; } = true;

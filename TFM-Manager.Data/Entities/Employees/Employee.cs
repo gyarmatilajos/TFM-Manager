@@ -30,7 +30,7 @@ namespace TFM_Manager.Data.Entities.Employees
         public bool IsActive { get; set; } = true;
         public string? Notes { get; set; }
 
-        public AppllicationUser? ApplicationUser { get; set; }
+        public ApplicationUser? ApplicationUser { get; set; }
 
         public ICollection<CompanyEmployee> CompanyEmployees { get; set; } = new List<CompanyEmployee>();
         public ICollection<EmployeeDocument> Documents { get; set; } = new List<EmployeeDocument>();

@@ -13,7 +13,7 @@ namespace TFM_Manager.Data.Entities.Lookups
         public string Name { get; set; } = string.Empty;
         public bool IsActive { get; set; } = true;
 
-        public ICollection<AppllicationUser> Users { get; set; } = new List<AppllicationUser>();
+        public ICollection<ApplicationUser> Users { get; set; } = new List<ApplicationUser>();
         public ICollection<RoleModulePermission> Permissions { get; set; } = new List<RoleModulePermission>();
 
         public void Configure(EntityTypeBuilder<UserRole> builder)
