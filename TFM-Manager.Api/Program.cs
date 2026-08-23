@@ -36,8 +36,8 @@ builder.Services
         options.Password.RequireUppercase = true;
         options.Password.RequireNonAlphanumeric = false;
     })
-    .AddEntityFrameworkStores<TfmManagerDbContext>()
-    .AddDefaultTokenProviders();
+    .AddEntityFrameworkStores<TfmManagerDbContext>();
+    
 
 // Jogosultsági szolgáltatások
 builder.Services.AddAuthorization();
