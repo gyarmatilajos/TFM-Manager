@@ -71,7 +71,16 @@ namespace TFM_Manager.Data.Entities.Partners
                 .HasForeignKey(x => x.ServiceTypeId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasIndex(x => new { x.PartnerId, x.CompanyId, x.ServiceTypeId });
+            
+
+            builder.HasIndex(x => new
+            {
+                x.PartnerId,
+                x.CompanyId,
+                x.ServiceTypeId
+            })
+                .IsUnique()
+                .HasFilter("[IsActive] = 1");
         }
 
     }

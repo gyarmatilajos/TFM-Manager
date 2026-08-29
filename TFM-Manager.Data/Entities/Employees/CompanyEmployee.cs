@@ -70,8 +70,11 @@ namespace TFM_Manager.Data.Entities.Employees
                 .HasForeignKey(x => x.EmploymentTypeId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasIndex(x => new { x.CompanyId, x.EmployeeId });
+            
             builder.HasIndex(x => x.EmploymentTypeId);
+            builder.HasIndex(x => new { x.CompanyId, x.EmployeeId })
+                .IsUnique()
+                .HasFilter("[IsActive] = 1");
 
         }
     }
