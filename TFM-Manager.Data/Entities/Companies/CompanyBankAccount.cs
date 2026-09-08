@@ -60,8 +60,10 @@ namespace TFM_Manager.Data.Entities.Companies
                 .HasForeignKey(x => x.CompanyId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasIndex(x => x.CompanyId);
-
+            builder.HasIndex(x => x.CompanyId)
+                .IsUnique()
+                .HasFilter("[IsActive] = 1 AND [IsDefault] = 1");
+            
         }
     }
 }

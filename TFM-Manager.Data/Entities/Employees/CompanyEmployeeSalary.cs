@@ -76,9 +76,11 @@ namespace TFM_Manager.Data.Entities.Employees
                 .HasForeignKey(x => x.WorkTimeTypeId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasIndex(x => x.CompanyEmployeeId);
+            
             builder.HasIndex(x => x.WorkTimeTypeId);
-
+            builder.HasIndex(x => x.CompanyEmployeeId)
+                .IsUnique()
+                .HasFilter("[IsActive] = 1");
         }
     }
 }
