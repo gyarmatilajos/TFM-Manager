@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>TFM_Manager.Api</RootNamespace>
+    <UserSecretsId>e0287fa9-bf64-4a45-9ca3-b029791892b0</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
