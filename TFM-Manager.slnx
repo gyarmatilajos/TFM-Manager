@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="Shared/Shared.csproj" Id="a0e747a5-aa4f-401a-9e27-14df35c8da51" />
   <Project Path="TFM-Manager.Api/TFM-Manager.Api.csproj" />
   <Project Path="TFM-Manager.Business/TFM-Manager.Business.csproj" />
   <Project Path="TFM-Manager.Data/TFM-Manager.Data.csproj" />

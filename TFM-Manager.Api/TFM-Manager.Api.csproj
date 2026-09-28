@@ -22,8 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Shared\Shared.csproj" />
     <ProjectReference Include="..\TFM-Manager.Business\TFM-Manager.Business.csproj" />
-    <ProjectReference Include="..\TFM-Manager.Data\TFM-Manager.Data.csproj" />
   </ItemGroup>
 
 </Project>
