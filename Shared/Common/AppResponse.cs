@@ -21,7 +21,7 @@ namespace TFM_Manager.Shared.Common
     {
         return new AppResponse<T>
         {
-            IsSuccess = isSuccess,
+            IsSuccess = true,
             Message = message,
             Data = data
         };
