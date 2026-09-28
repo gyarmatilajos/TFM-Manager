@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Shared\Shared.csproj" />
+    <ProjectReference Include="..\Shared\TFM-Manager.Shared.csproj" />
     <ProjectReference Include="..\TFM-Manager.Data\TFM-Manager.Data.csproj" />
   </ItemGroup>
 
