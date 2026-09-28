@@ -14,14 +14,14 @@ namespace TFM_Manager.Shared.Common
     }
     public static class User
     {
-        public const string UserNotFound = "User.UserNotFound";
+        public const string NotFound = "User.NotFound";
         public const string InvalidCredentials = "User.InvalidCredentials";
-        public const string UserAlreadyExists = "User.UserAlreadyExists";
+        public const string AlreadyExists = "User.AlreadyExists";
     }
     public static class Partner
     {
-        public const string PartnerNotFound = "Partner.PartnerNotFound";
-        public const string PartnerAlreadyExists = "Partner.PartnerAlreadyExists";
+        public const string NotFound = "Partner.NotFound";
+        public const string AlreadyExists = "Partner.AlreadyExists";
     }
 }
 }
