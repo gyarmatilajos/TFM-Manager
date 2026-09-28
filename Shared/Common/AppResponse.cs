@@ -10,14 +10,14 @@ namespace TFM_Manager.Shared.Common
     public bool IsSuccess { get; init; }
     public string Message { get; init; } = string.Empty;
     public T? Data { get; init; }
-    public AppError Error { get; init; }
+    public AppError? Error { get; init; }
     public AppResponse()
     {
         IsSuccess = true;
         Message = string.Empty;
         Data = default;
     }
-    public static AppResponse<T> Success(bool isSuccess, string message, T? data)
+    public static AppResponse<T> Success(string message, T? data)
     {
         return new AppResponse<T>
         {
