@@ -26,7 +26,7 @@ namespace TFM_Manager.Shared.Common
             Data = data
         };
     }
-    public static AppResponse<T> Failure(string message, string code)
+    public static AppResponse<T> Failure(string code, string message)
     {
         return new AppResponse<T>
         {
