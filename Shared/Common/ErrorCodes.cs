@@ -23,5 +23,10 @@ namespace TFM_Manager.Shared.Common
         public const string NotFound = "Partner.NotFound";
         public const string AlreadyExists = "Partner.AlreadyExists";
     }
+
+        public static class Company
+        {
+            public static string NotFound = "Company.NotFound";
+        }
 }
 }
