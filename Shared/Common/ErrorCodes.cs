@@ -27,6 +27,7 @@ namespace TFM_Manager.Shared.Common
         public static class Company
         {
             public static string NotFound = "Company.NotFound";
+            public static string ValidationError { get; set; } = "Company.ValidationError";
         }
 }
 }
