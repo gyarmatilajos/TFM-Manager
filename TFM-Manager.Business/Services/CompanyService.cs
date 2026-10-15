@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using TFM_Manager.Business.Interfaces;
 using TFM_Manager.Data.DbContext;
+using TFM_Manager.Data.Entities.Companies;
 using TFM_Manager.Shared.Common;
 using TFM_Manager.Shared.Companies.Requests;
 using TFM_Manager.Shared.Companies.Responses;
@@ -24,7 +25,7 @@ namespace TFM_Manager.Business.Services
             throw new NotImplementedException();
         }
 
-        public Task<AppResponse<CompanyResponse>> CreateAsync(CreateCompanyRequest request)
+        public async Task<AppResponse<CompanyResponse>> CreateAsync(CreateCompanyRequest request)
         {
             // Kötelező mezők ellenőrzése
             if (string.IsNullOrWhiteSpace(request.Name) ||
@@ -43,7 +44,7 @@ namespace TFM_Manager.Business.Services
             if (taxNumberExists)
             {
                 return AppResponse<CompanyResponse>.Failure(
-                    ErrorCodes.AlreadyExists,
+                    ErrorCodes.Company.AlreadyExists,
                     "A megadott adószámmal már létezik cég.");
             }
 
@@ -57,7 +58,7 @@ namespace TFM_Manager.Business.Services
                 if (!employeeExists)
                 {
                     return AppResponse<CompanyResponse>.Failure(
-                        ErrorCodes.ValidationError,
+                        ErrorCodes.Company.ValidationError,
                         "A megadott képviselő nem található.");
                 }
             }

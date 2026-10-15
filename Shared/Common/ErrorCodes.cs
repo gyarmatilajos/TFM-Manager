@@ -28,6 +28,7 @@ namespace TFM_Manager.Shared.Common
         {
             public const string NotFound = "Company.NotFound";
             public const string ValidationError = "Company.ValidationError";
+            public const string AlreadyExists = "Company.AlreadyExists";
         }
 }
 }
