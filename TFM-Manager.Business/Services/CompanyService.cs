@@ -20,9 +20,32 @@ namespace TFM_Manager.Business.Services
             _context = context;
         }
 
-        public Task<AppResponse<bool>> ActivateAsync(int id)
+        public async Task<AppResponse<bool>> ActivateAsync(int id)
         {
-            throw new NotImplementedException();
+            var company = await _context.Companies
+        .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (company is null)
+            {
+                return AppResponse<bool>.Failure(
+                    ErrorCodes.Company.NotFound,
+                    "A megadott cég nem található.");
+            }
+
+            if (company.IsActive)
+            {
+                return AppResponse<bool>.Success(
+                    "A cég már aktív.",
+                    true);
+            }
+
+            company.IsActive = true;
+
+            await _context.SaveChangesAsync();
+
+            return AppResponse<bool>.Success(
+                "A cég sikeresen aktiválva.",
+                true);
         }
 
         public async Task<AppResponse<CompanyResponse>> CreateAsync(CreateCompanyRequest request)
@@ -38,6 +61,7 @@ namespace TFM_Manager.Business.Services
             }
 
             // Adószám egyediségének ellenőrzése
+            var taxnumber = request.TaxNumber.Trim();
             var taxNumberExists = await _context.Companies
                 .AnyAsync(x => x.TaxNumber == request.TaxNumber);
 
@@ -67,7 +91,7 @@ namespace TFM_Manager.Business.Services
             var company = new Company
             {
                 Name = request.Name.Trim(),
-                TaxNumber = request.TaxNumber.Trim(),
+                TaxNumber = taxnumber,
                 CompanyRegistrationNumber = request.CompanyRegistrationNumber,
                 RegisteredAddress = request.RegisteredAddress.Trim(),
                 MailingAddress = request.MailingAddress,
@@ -100,9 +124,32 @@ namespace TFM_Manager.Business.Services
                 response);
         }
 
-        public Task<AppResponse<bool>> DeactivateAsync(int id)
+        public async Task<AppResponse<bool>> DeactivateAsync(int id)
         {
-            throw new NotImplementedException();
+            var company = await _context.Companies
+         .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (company is null)
+            {
+                return AppResponse<bool>.Failure(
+                    ErrorCodes.Company.NotFound,
+                    "A megadott cég nem található.");
+            }
+
+            if (!company.IsActive)
+            {
+                return AppResponse<bool>.Success(
+                    "A cég már inaktív.",
+                    true);
+            }
+
+            company.IsActive = false;
+
+            await _context.SaveChangesAsync();
+
+            return AppResponse<bool>.Success(
+                "A cég sikeresen inaktiválva.",
+                true);
         }
 
         public async Task<AppResponse<List<CompanyListItemResponse>>> GetAllAsync(bool includeInactive = false)
@@ -155,9 +202,92 @@ namespace TFM_Manager.Business.Services
             return AppResponse<CompanyResponse>.Success("A cég lekérdezése sikeres", company);
         }
 
-        public Task<AppResponse<CompanyResponse>> UpdateAsync(int id, UpdateCompanyRequest request)
+        public async Task<AppResponse<CompanyResponse>> UpdateAsync(int id, UpdateCompanyRequest request)
         {
-            throw new NotImplementedException();
+            // Cég keresése
+            var company = await _context.Companies
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (company is null)
+            {
+                return AppResponse<CompanyResponse>.Failure(
+                    ErrorCodes.Company.NotFound,
+                    "A módosítandó cég nem található.");
+            }
+
+            if (string.IsNullOrWhiteSpace(request.Name) ||
+                string.IsNullOrWhiteSpace(request.TaxNumber) ||
+                string.IsNullOrWhiteSpace(request.RegisteredAddress))
+            {
+                return AppResponse<CompanyResponse>.Failure(
+                    ErrorCodes.Company.ValidationError,
+                    "A cégnév, az adószám és a székhely megadása kötelező.");
+            }
+
+            // Adószám normalizálása
+            var taxNumber = request.TaxNumber.Trim();
+
+            // Adószám egyediségének ellenőrzése
+            var taxNumberExists = await _context.Companies
+                .AnyAsync(x =>
+                    x.TaxNumber == taxNumber &&
+                    x.Id != id);
+
+            if (taxNumberExists)
+            {
+                return AppResponse<CompanyResponse>.Failure(
+                    ErrorCodes.Company.AlreadyExists,
+                    "A megadott adószámmal már létezik másik cég.");
+            }
+
+            if (request.RepresentativeEmployeeId.HasValue)
+            {
+                var employeeExists = await _context.Employees
+                    .AnyAsync(x =>
+                        x.Id == request.RepresentativeEmployeeId.Value);
+
+                if (!employeeExists)
+                {
+                    return AppResponse<CompanyResponse>.Failure(
+                        ErrorCodes.Company.ValidationError,
+                        "A megadott képviselő nem található.");
+                }
+            }
+
+            // Cég adatainak frissítése
+            company.Name = request.Name.Trim();
+            company.TaxNumber = taxNumber;
+            company.CompanyRegistrationNumber =
+                request.CompanyRegistrationNumber;
+            company.RegisteredAddress = request.RegisteredAddress.Trim();
+            company.MailingAddress = request.MailingAddress;
+            company.BillingEmail = request.BillingEmail;
+            company.RepresentativeEmployeeId =
+                request.RepresentativeEmployeeId;
+            company.Notes = request.Notes;
+
+            await _context.SaveChangesAsync();
+
+            // Response DTO összeállítása
+            var response = new CompanyResponse
+            {
+                Id = company.Id,
+                Name = company.Name,
+                TaxNumber = company.TaxNumber,
+                CompanyRegistrationNumber =
+                    company.CompanyRegistrationNumber,
+                RegisteredAddress = company.RegisteredAddress,
+                MailingAddress = company.MailingAddress,
+                BillingEmail = company.BillingEmail,
+                RepresentativeEmployeeId =
+                    company.RepresentativeEmployeeId,
+                IsActive = company.IsActive,
+                Notes = company.Notes
+            };
+
+            return AppResponse<CompanyResponse>.Success(
+                "A cég adatai sikeresen módosítva.",
+                response);
         }
     }
 }
