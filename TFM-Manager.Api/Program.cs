@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TFM_Manager.Data.DbContext;
 using TFM_Manager.Data.Entities.Identity;
 using TFM_Manager.Business;
+using TFM_Manager.Api.ExcpetionHandling;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +23,13 @@ builder.Services.AddOpenApi();
 // DbContext
 builder.Services.AddDbContext<TfmManagerDbContext>(options =>
 {
-    options.UseSqlServer(connectionString);
+    options.UseSqlServer(connectionString, sqlOptions =>
+    {
+        sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null);
+    });
 });
 
 // Identity alapregisztráció
@@ -41,11 +48,15 @@ builder.Services
 
 //Szolgáltatások regisztrációja
 builder.Services.AddBusinessServices();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 // Jogosultsági szolgáltatások
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+
+app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment())
 {
@@ -57,5 +68,19 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+if (app.Environment.IsDevelopment())
+{
+    using var scope = app.Services.CreateScope();
+
+    var dbContext = scope.ServiceProvider
+        .GetRequiredService<TfmManagerDbContext>();
+
+    var canConnect = await dbContext.Database.CanConnectAsync();
+
+    app.Logger.LogInformation(
+        "Azure SQL adatbázis-kapcsolat: {Status}",
+        canConnect ? "SIKERES" : "SIKERTELEN");
+}
 
 app.Run();
