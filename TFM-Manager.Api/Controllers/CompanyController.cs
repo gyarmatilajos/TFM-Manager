@@ -19,7 +19,7 @@ namespace TFM_Manager.Api.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<CompanyListItemResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(AppResponse<List<CompanyListItemResponse>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll([FromQuery] bool includeInactive = false)
         {
             var result = await _companyService.GetAllAsync(includeInactive);
@@ -28,8 +28,8 @@ namespace TFM_Manager.Api.Controllers
         }
 
         [HttpGet("{id:int}")]
-        [ProducesResponseType(typeof(CompanyResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(AppResponse<CompanyResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(AppResponse<CompanyResponse>), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _companyService.GetByIdAsync(id);
@@ -77,10 +77,10 @@ namespace TFM_Manager.Api.Controllers
         StatusCodes.Status200OK)]
         [ProducesResponseType(
         StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(
-        StatusCodes.Status404NotFound)]
-        [ProducesResponseType(
-        StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(AppResponse<CompanyResponse>)
+        , StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(AppResponse<CompanyResponse>)
+        , StatusCodes.Status409Conflict)]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateCompanyRequest request)
         {
             var result = await _companyService.UpdateAsync(id, request);
@@ -104,8 +104,8 @@ namespace TFM_Manager.Api.Controllers
         [ProducesResponseType(
             typeof(AppResponse<bool>),
             StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(AppResponse<bool>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(AppResponse<bool>), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Deactivate(int id)
         {
             var result = await _companyService.DeactivateAsync(id);
@@ -127,8 +127,8 @@ namespace TFM_Manager.Api.Controllers
         [ProducesResponseType(
             typeof(AppResponse<bool>),
             StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(AppResponse<bool>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(AppResponse<bool>), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Activate(int id)
         {
             var result = await _companyService.ActivateAsync(id);

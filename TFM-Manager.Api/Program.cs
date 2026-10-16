@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TFM_Manager.Api.ExcpetionHandling;
+using TFM_Manager.Business;
 using TFM_Manager.Data.DbContext;
 using TFM_Manager.Data.Entities.Identity;
-using TFM_Manager.Business;
-using TFM_Manager.Api.ExcpetionHandling;
+using TFM_Manager.Shared.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +17,28 @@ if (string.IsNullOrWhiteSpace(connectionString))
 }
 
 // Controllers
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+     .ConfigureApiBehaviorOptions(options =>
+     {
+         options.InvalidModelStateResponseFactory = context =>
+         {
+             var errors = context.ModelState
+                 .Where(x => x.Value?.Errors.Count > 0)
+                 .SelectMany(x => x.Value!.Errors)
+                 .Select(x => x.ErrorMessage)
+                 .ToList();
+
+             var message = errors.Count > 0
+                 ? string.Join(" ", errors)
+                 : "A megadott adatok érvénytelenek.";
+
+             var response = AppResponse<object>.Failure(
+                 ErrorCodes.General.InvalidInput,
+                 message);
+
+             return new BadRequestObjectResult(response);
+         };
+     }); ;
 
 // OpenAPI
 builder.Services.AddOpenApi();

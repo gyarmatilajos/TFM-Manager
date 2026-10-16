@@ -8,6 +8,7 @@ using TFM_Manager.Data.Entities.Companies;
 using TFM_Manager.Shared.Common;
 using TFM_Manager.Shared.Companies.Requests;
 using TFM_Manager.Shared.Companies.Responses;
+using Microsoft.Data.SqlClient;
 
 namespace TFM_Manager.Business.Services
 {
@@ -63,7 +64,7 @@ namespace TFM_Manager.Business.Services
             // Adószám egyediségének ellenőrzése
             var taxnumber = request.TaxNumber.Trim();
             var taxNumberExists = await _context.Companies
-                .AnyAsync(x => x.TaxNumber == request.TaxNumber);
+                .AnyAsync(x => x.TaxNumber == taxnumber);
 
             if (taxNumberExists)
             {
@@ -102,7 +103,22 @@ namespace TFM_Manager.Business.Services
             };
 
             _context.Companies.Add(company);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+                when (ex.InnerException is SqlException sqlEx &&
+                      (sqlEx.Number == 2601 || sqlEx.Number == 2627) &&
+                      sqlEx.Message.Contains(
+                          "IX_Companies_TaxNumber",
+                          StringComparison.OrdinalIgnoreCase))
+            {
+                return AppResponse<CompanyResponse>.Failure(
+                    ErrorCodes.Company.AlreadyExists,
+                    "A megadott adószámmal már létezik cég.");
+            }
+            
 
             // Válasz DTO összeállítása
             var response = new CompanyResponse
@@ -266,7 +282,21 @@ namespace TFM_Manager.Business.Services
                 request.RepresentativeEmployeeId;
             company.Notes = request.Notes;
 
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+                when (ex.InnerException is SqlException sqlEx &&
+                      (sqlEx.Number == 2601 || sqlEx.Number == 2627) &&
+                      sqlEx.Message.Contains(
+                          "IX_Companies_TaxNumber",
+                          StringComparison.OrdinalIgnoreCase))
+            {
+                return AppResponse<CompanyResponse>.Failure(
+                    ErrorCodes.Company.AlreadyExists,
+                    "A megadott adószámmal már létezik másik cég.");
+            }
 
             // Response DTO összeállítása
             var response = new CompanyResponse

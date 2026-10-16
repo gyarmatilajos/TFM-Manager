@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using TFM_Manager.Shared.Common;
 
 namespace TFM_Manager.Api.ExcpetionHandling
 {
@@ -18,19 +19,15 @@ namespace TFM_Manager.Api.ExcpetionHandling
            "Nem kezelt kivétel. Útvonal: {Path}",
            httpContext.Request.Path);
 
-            var problem = new ProblemDetails
-            {
-                Status = StatusCodes.Status500InternalServerError,
-                Title = "Belső szerverhiba",
-                Detail = "Váratlan hiba történt a kérés feldolgozása során.",
-                Instance = httpContext.Request.Path
-            };
+            var response = AppResponse<object>.Failure(
+    ErrorCodes.General.UnexpectedError,
+    "Váratlan hiba történt a kérés feldolgozása során.");
 
             httpContext.Response.StatusCode =
                 StatusCodes.Status500InternalServerError;
 
             await httpContext.Response.WriteAsJsonAsync(
-                problem,
+                response,
                 cancellationToken);
 
             return true;

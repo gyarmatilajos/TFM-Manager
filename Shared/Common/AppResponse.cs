@@ -6,22 +6,23 @@ using TFM_Manager.Shared.Common;
 namespace TFM_Manager.Shared.Common
 {
     public sealed class AppResponse<T>
-{
-    public bool IsSuccess { get; init; }
-    public string Message { get; init; } = string.Empty;
-    public T? Data { get; init; }
-    public AppError? Error { get; init; }
-    public AppResponse()
     {
-        IsSuccess = true;
-        Message = string.Empty;
-        Data = default;
-    }
-    public static AppResponse<T> Success(string message, T? data)
-    {
-        return new AppResponse<T>
+        public bool IsSuccess { get; init; }
+        public string Message { get; init; } = string.Empty;
+        public T? Data { get; init; }
+        public AppError? Error { get; init; }
+        public AppResponse()
         {
-            IsSuccess = true,
+            IsSuccess = true;
+            Message = string.Empty;
+            Data = default;
+            Error = default;
+        }
+        public static AppResponse<T> Success(string message, T? data)
+        {
+            return new AppResponse<T>
+            {
+                IsSuccess = true,
             Message = message,
             Data = data
         };
