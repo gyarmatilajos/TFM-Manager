@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TFM_Manager.Business.Interfaces;
+using TFM_Manager.Business.Services;
 
 namespace TFM_Manager.Business
 {
@@ -9,8 +11,7 @@ namespace TFM_Manager.Business
     {
         public static IServiceCollection AddBusinessServices(this IServiceCollection services)
         {
-            // Register your business services here
-            // Example: services.AddScoped<IMyService, MyService>();
+            services.AddScoped<IcompanyService, CompanyService>();
             return services;
         }
     }

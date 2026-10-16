@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TFM_Manager.Data.DbContext;
 using TFM_Manager.Data.Entities.Identity;
+using TFM_Manager.Business;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +38,9 @@ builder.Services
         options.Password.RequireNonAlphanumeric = false;
     })
     .AddEntityFrameworkStores<TfmManagerDbContext>();
-    
+
+//Szolgáltatások regisztrációja
+builder.Services.AddBusinessServices();
 
 // Jogosultsági szolgáltatások
 builder.Services.AddAuthorization();
