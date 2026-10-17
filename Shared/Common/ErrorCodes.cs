@@ -30,5 +30,12 @@ namespace TFM_Manager.Shared.Common
             public const string ValidationError = "Company.ValidationError";
             public const string AlreadyExists = "Company.AlreadyExists";
         }
+
+        public static class Employee
+        {
+            public const string NotFound = "Employee.NotFound";
+            public const string AlreadyExists = "Employee.AlreadyExists";
+            public const string ValidationError = "Employee.ValidationError";
+        }
 }
 }

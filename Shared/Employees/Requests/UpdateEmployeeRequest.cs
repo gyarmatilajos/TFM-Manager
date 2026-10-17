@@ -22,7 +22,7 @@ namespace TFM_Manager.Shared.Employees.Requests
         [MaxLength(500)]                
         public string? Address { get; init; }
         [MaxLength(20)]
-        public required string? TaxIdentificationNumber { get; init; }
+        public string? TaxIdentificationNumber { get; init; }
 
         [MaxLength(20)]
         public string? SocialSecurityNumber { get; init; }
