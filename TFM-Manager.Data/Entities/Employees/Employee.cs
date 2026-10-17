@@ -22,7 +22,7 @@ namespace TFM_Manager.Data.Entities.Employees
         public string? Phone { get; set; }
         public string? Email { get; set; }
         public string? Address { get; set; }
-        public string TaxIdentificationNumber { get; set; } = string.Empty;
+        public string? TaxIdentificationNumber { get; set; }
         public string? SocialSecurityNumber { get; set; }
         public DateOnly? DateOfBirth { get; set; }
         public string? PlaceOfBirth { get; set; }
@@ -59,10 +59,11 @@ namespace TFM_Manager.Data.Entities.Employees
                 .HasMaxLength(500);
 
             builder.Property(x => x.TaxIdentificationNumber)
-                .IsRequired()
+                .IsRequired(false)
                 .HasMaxLength(20);
 
             builder.Property(x => x.SocialSecurityNumber)
+                .IsRequired(false)
                 .HasMaxLength(20);
 
             builder.Property(x => x.PlaceOfBirth)
