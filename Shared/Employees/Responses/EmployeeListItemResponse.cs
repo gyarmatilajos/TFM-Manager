@@ -11,6 +11,7 @@ namespace TFM_Manager.Shared.Employees.Responses
         public required string FullName { get; init; }
 
         public int EmployeeTypeId { get; init; }
+        public string EmployeeTypeName { get; init; } = string.Empty;
 
         public string? Phone { get; init; }
 
