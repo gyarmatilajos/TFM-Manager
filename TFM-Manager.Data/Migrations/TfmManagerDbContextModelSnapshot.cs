@@ -723,7 +723,6 @@ namespace TFM_Manager.Data.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("TaxIdentificationNumber")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
@@ -732,7 +731,8 @@ namespace TFM_Manager.Data.Migrations
                     b.HasIndex("EmployeeTypeId");
 
                     b.HasIndex("TaxIdentificationNumber")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[TaxIdentificationNumber] IS NOT NULL");
 
                     b.ToTable("Employees");
                 });
