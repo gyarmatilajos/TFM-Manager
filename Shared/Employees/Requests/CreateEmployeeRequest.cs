@@ -12,7 +12,7 @@ namespace TFM_Manager.Shared.Employees.Requests
         public required string FullName { get; init; }
         [Range(1, int.MaxValue)]
         public int EmployeeTypeId { get; init; }
-        [MaxLength(30)]
+        [MaxLength(50)]
         public string? Phone { get; init; }
         [EmailAddress]
         [MaxLength(256)]
@@ -26,7 +26,7 @@ namespace TFM_Manager.Shared.Employees.Requests
         public string? SocialSecurityNumber { get; init; }
         
         public DateOnly? DateOfBirth { get; init; }
-        [MaxLength(100)]
+        [MaxLength(150)]
         public string? PlaceOfBirth { get; init; }
         [MaxLength(200)]
         public string? MotherName { get; init; }
