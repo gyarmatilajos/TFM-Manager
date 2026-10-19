@@ -11,8 +11,10 @@ namespace TFM_Manager.Business
     {
         public static IServiceCollection AddBusinessServices(this IServiceCollection services)
         {
+            services.AddScoped<ICompanyEmployeeService, CompanyEmployeeService>();
             services.AddScoped<IcompanyService, CompanyService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
+
             return services;
         }
     }

@@ -616,7 +616,12 @@ namespace TFM_Manager.Data.Migrations
                         .IsUnique()
                         .HasFilter("[IsActive] = 1");
 
-                    b.ToTable("CompanyEmployees");
+                    b.ToTable("CompanyEmployees", t =>
+                        {
+                            t.HasCheckConstraint("CK_CompanyEmployee_EndDate_After_StartDate", "[EndDate] IS NULL OR[EndDate] >= [StartDate]");
+
+                            t.HasCheckConstraint("CK_CompanyEmployee_EndDate_Required_When_Inactive", "[IsActive] = 1 OR[EndDate] IS NOT NULL");
+                        });
                 });
 
             modelBuilder.Entity("TFM_Manager.Data.Entities.Employees.CompanyEmployeeSalary", b =>

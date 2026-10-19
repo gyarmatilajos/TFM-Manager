@@ -33,6 +33,14 @@ namespace TFM_Manager.Data.Entities.Employees
         {
             builder.HasKey(x => x.Id);
 
+            builder.ToTable(t =>
+            {
+                t.HasCheckConstraint("CK_CompanyEmployee_EndDate_Required_When_Inactive",
+                    "[IsActive] = 1 OR[EndDate] IS NOT NULL");
+                t.HasCheckConstraint("CK_CompanyEmployee_EndDate_After_StartDate",
+                    "[EndDate] IS NULL OR[EndDate] >= [StartDate]");
+            });
+
             builder.Property(x => x.CompanyId)
                 .IsRequired();
 
