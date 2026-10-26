@@ -143,7 +143,7 @@ namespace TFM_Manager.Business.Services
         public async Task<AppResponse<bool>> DeactivateAsync(int id)
         {
             var company = await _context.Companies
-         .FirstOrDefaultAsync(x => x.Id == id);
+        .FirstOrDefaultAsync(x => x.Id == id);
 
             if (company is null)
             {
@@ -155,8 +155,18 @@ namespace TFM_Manager.Business.Services
             if (!company.IsActive)
             {
                 return AppResponse<bool>.Success(
-                    "A cég már inaktív.",
-                    true);
+                    "A cég már inaktív.", true);
+            }
+
+            // Aktív jogviszonyok ellenőrzése
+            var hasActiveEmployment = await _context.CompanyEmployees
+                .AnyAsync(x => x.CompanyId == id && x.IsActive);
+
+            if (hasActiveEmployment)
+            {
+                return AppResponse<bool>.Failure(
+                    ErrorCodes.Company.ValidationError,
+                    "A cég nem inaktiválható, mert aktív dolgozói jogviszonyok tartoznak hozzá. Előbb zárja le a jogviszonyokat.");
             }
 
             company.IsActive = false;
@@ -164,8 +174,7 @@ namespace TFM_Manager.Business.Services
             await _context.SaveChangesAsync();
 
             return AppResponse<bool>.Success(
-                "A cég sikeresen inaktiválva.",
-                true);
+                "A cég sikeresen inaktiválva.", true);
         }
 
         public async Task<AppResponse<List<CompanyListItemResponse>>> GetAllAsync(bool includeInactive = false)
