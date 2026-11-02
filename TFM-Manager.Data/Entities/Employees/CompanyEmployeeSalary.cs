@@ -14,15 +14,13 @@ namespace TFM_Manager.Data.Entities.Employees
         public int CompanyEmployeeId { get; set; }
         public CompanyEmployee CompanyEmployee { get; set; } = null!;
 
-        public int WorkTimeTypeId { get; set; }
-        public WorkTimeType WorkTimeType { get; set; } = null!;
+        public int? WorkTimeTypeId { get; set; }
+        public WorkTimeType? WorkTimeType { get; set; }
 
         public DateOnly ValidFrom { get; set; }
         public DateOnly? ValidTo { get; set; }
         public decimal NetSalary { get; set; }
         public decimal GrossSalary { get; set; }
-        public decimal EmployerContribution { get; set; }
-        public decimal EmployeeContribution { get; set; }
         public decimal TotalCompanyCost { get; set; }
         public bool IsActive { get; set; } = true;
         public string? Notes { get; set; }
@@ -35,7 +33,7 @@ namespace TFM_Manager.Data.Entities.Employees
                 .IsRequired();
 
             builder.Property(x => x.WorkTimeTypeId)
-                .IsRequired();
+                .IsRequired(false);
 
             builder.Property(x => x.ValidFrom)
                 .IsRequired();
@@ -45,14 +43,6 @@ namespace TFM_Manager.Data.Entities.Employees
                 .HasColumnType("decimal(18,2)");
 
             builder.Property(x => x.GrossSalary)
-                .IsRequired()
-                .HasColumnType("decimal(18,2)");
-
-            builder.Property(x => x.EmployerContribution)
-                .IsRequired()
-                .HasColumnType("decimal(18,2)");
-
-            builder.Property(x => x.EmployeeContribution)
                 .IsRequired()
                 .HasColumnType("decimal(18,2)");
 
@@ -81,6 +71,21 @@ namespace TFM_Manager.Data.Entities.Employees
             builder.HasIndex(x => x.CompanyEmployeeId)
                 .IsUnique()
                 .HasFilter("[IsActive] = 1");
+
+            builder.ToTable(t =>
+            {
+                t.HasCheckConstraint(
+                    "CK_CompanyEmployeeSalary_GrossSalary",
+                    "[GrossSalary] >= 0");
+
+                t.HasCheckConstraint(
+                    "CK_CompanyEmployeeSalary_NetSalary",
+                    "[NetSalary] >= 0");
+
+                t.HasCheckConstraint(
+                    "CK_CompanyEmployeeSalary_TotalCompanyCost",
+                    "[TotalCompanyCost] >= 0");
+            });
         }
     }
 }

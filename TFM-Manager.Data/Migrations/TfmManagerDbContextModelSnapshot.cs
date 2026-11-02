@@ -635,12 +635,6 @@ namespace TFM_Manager.Data.Migrations
                     b.Property<int>("CompanyEmployeeId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("EmployeeContribution")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("EmployerContribution")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<decimal>("GrossSalary")
                         .HasColumnType("decimal(18,2)");
 
@@ -663,7 +657,7 @@ namespace TFM_Manager.Data.Migrations
                     b.Property<DateOnly?>("ValidTo")
                         .HasColumnType("date");
 
-                    b.Property<int>("WorkTimeTypeId")
+                    b.Property<int?>("WorkTimeTypeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -674,7 +668,14 @@ namespace TFM_Manager.Data.Migrations
 
                     b.HasIndex("WorkTimeTypeId");
 
-                    b.ToTable("CompanyEmployeeSalaries");
+                    b.ToTable("CompanyEmployeeSalaries", t =>
+                        {
+                            t.HasCheckConstraint("CK_CompanyEmployeeSalary_GrossSalary", "[GrossSalary] >= 0");
+
+                            t.HasCheckConstraint("CK_CompanyEmployeeSalary_NetSalary", "[NetSalary] >= 0");
+
+                            t.HasCheckConstraint("CK_CompanyEmployeeSalary_TotalCompanyCost", "[TotalCompanyCost] >= 0");
+                        });
                 });
 
             modelBuilder.Entity("TFM_Manager.Data.Entities.Employees.Employee", b =>
@@ -2133,8 +2134,7 @@ namespace TFM_Manager.Data.Migrations
                     b.HasOne("TFM_Manager.Data.Entities.Lookups.WorkTimeType", "WorkTimeType")
                         .WithMany()
                         .HasForeignKey("WorkTimeTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("CompanyEmployee");
 
