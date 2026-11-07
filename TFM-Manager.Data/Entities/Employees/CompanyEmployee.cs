@@ -25,6 +25,7 @@ namespace TFM_Manager.Data.Entities.Employees
         public DateOnly StartDate { get; set; }
         public DateOnly? EndDate { get; set; }
         public bool IsActive { get; set; } = true;
+        public bool IsInvaldated { get; set; } = false;
         public string? Notes { get; set; }
 
         public ICollection<CompanyEmployeeSalary> Salaries { get; set; } = new List<CompanyEmployeeSalary>();
@@ -35,8 +36,9 @@ namespace TFM_Manager.Data.Entities.Employees
 
             builder.ToTable(t =>
             {
-                t.HasCheckConstraint("CK_CompanyEmployee_EndDate_Required_When_Inactive",
-                    "[IsActive] = 1 OR[EndDate] IS NOT NULL");
+                t.HasCheckConstraint(
+                    "CK_CompanyEmployee_EndDate_Required_When_Inactive",
+                    "[IsActive] = 1 OR [IsInvalidated] = 1 OR [EndDate] IS NOT NULL");
                 t.HasCheckConstraint("CK_CompanyEmployee_EndDate_After_StartDate",
                     "[EndDate] IS NULL OR[EndDate] >= [StartDate]");
             });
@@ -59,6 +61,8 @@ namespace TFM_Manager.Data.Entities.Employees
 
             builder.Property(x => x.IsActive)
                 .IsRequired();
+            builder.Property(x => x.IsInvaldated)
+                .IsRequired().HasDefaultValue(false);
 
             builder.Property(x => x.Notes)
                 .HasMaxLength(2000);
@@ -82,7 +86,7 @@ namespace TFM_Manager.Data.Entities.Employees
             builder.HasIndex(x => x.EmploymentTypeId);
             builder.HasIndex(x => new { x.CompanyId, x.EmployeeId })
                 .IsUnique()
-                .HasFilter("[IsActive] = 1");
+                .HasFilter("[IsActive] = 1 AND [IsInvalidated] = 0");
 
         }
     }

@@ -71,6 +71,12 @@ namespace TFM_Manager.Data.Entities.Employees
             builder.HasIndex(x => x.CompanyEmployeeId)
                 .IsUnique()
                 .HasFilter("[IsActive] = 1");
+            builder.HasIndex(x => new
+            {
+                x.CompanyEmployeeId,
+                x.ValidFrom
+            })
+.IsUnique();
 
             builder.ToTable(t =>
             {
