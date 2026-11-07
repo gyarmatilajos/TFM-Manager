@@ -25,7 +25,7 @@ namespace TFM_Manager.Data.Entities.Employees
         public DateOnly StartDate { get; set; }
         public DateOnly? EndDate { get; set; }
         public bool IsActive { get; set; } = true;
-        public bool IsInvaldated { get; set; } = false;
+        public bool IsInvalidated { get; set; } = false;
         public string? Notes { get; set; }
 
         public ICollection<CompanyEmployeeSalary> Salaries { get; set; } = new List<CompanyEmployeeSalary>();
@@ -61,7 +61,7 @@ namespace TFM_Manager.Data.Entities.Employees
 
             builder.Property(x => x.IsActive)
                 .IsRequired();
-            builder.Property(x => x.IsInvaldated)
+            builder.Property(x => x.IsInvalidated)
                 .IsRequired().HasDefaultValue(false);
 
             builder.Property(x => x.Notes)
